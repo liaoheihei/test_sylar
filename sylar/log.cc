@@ -92,10 +92,43 @@ void LogFormatter::init(){
     // str, format, type
     std::vector<std::tuple<std::string, std::string, int> > vec;
     std::string str;
-    size_t last_pos = 0;
     for(size_t i = 0; i < m_pattern.size(); ++i){
         if(m_pattern[i] != '%'){
-            str.append(l, m_pattern[i]);
+            str.append(1, m_pattern[i]);
+            continue;
+        }
+        size_t n = i + 1;
+        int fmt_status = 0;
+        size_t fmt_begin = 0;
+
+        std::string str;
+        std::string fmt;
+        while(n < m_pattern.size()){
+            if(isspace(m_pattern[n])){
+                // 如果是空格，说明字符串不连续，中断
+                break;
+            }
+            if (fmt_status == 0){
+                if (m_pattern[n] == '{'){
+                    str = m_pattern.substr(i + 1, n - i - 1);
+                    fmt_status = 1;     // 解析格式
+                    ++n;
+                    fmt_begin = n;
+                    continue;
+                }
+            }
+            if(fmt_status == 1){
+                if(m_pattern[n] == '}'){
+                    fmt = m_pattern.substr(fmt_begin + 1, n - fmt_begin - 1);
+                    fmt_status = 2;
+                    ++n;
+                    continue;
+                }
+            }
+        }
+
+        if(fmt_status == 0){
+            str = m_pattern.substr(i + 1, n - i - 1);
         }
     }
 }
