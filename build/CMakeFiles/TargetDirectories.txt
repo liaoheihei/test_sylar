@@ -1,0 +1,4 @@
+/home/fred/workspace/sylar/build/CMakeFiles/rebuild_cache.dir
+/home/fred/workspace/sylar/build/CMakeFiles/sylar.dir
+/home/fred/workspace/sylar/build/CMakeFiles/edit_cache.dir
+/home/fred/workspace/sylar/build/CMakeFiles/main.dir

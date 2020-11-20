@@ -14,7 +14,8 @@
                 "/usr/include/x86_64-linux-gnu",
                 "/usr/include"
             ],
-            "defines": []
+            "defines": [],
+            "compileCommands": "${workspaceFolder}/build/compile_commands.json"
         }
     ],
     "version": 4
