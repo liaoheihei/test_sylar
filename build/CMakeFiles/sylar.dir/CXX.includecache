@@ -15,6 +15,10 @@ functional
 -
 iostream
 -
+time.h
+-
+string.h
+-
 
 /home/fred/workspace/sylar/sylar/log.h
 string
@@ -32,5 +36,27 @@ fstream
 iostream
 -
 vector
+-
+stdarg.h
+-
+map
+-
+singleton.h
+/home/fred/workspace/sylar/sylar/singleton.h
+
+/home/fred/workspace/sylar/sylar/singleton.h
+memory
+-
+
+/home/fred/workspace/sylar/sylar/util.cc
+util.h
+/home/fred/workspace/sylar/sylar/util.h
+
+/home/fred/workspace/sylar/sylar/util.h
+sys/syscall.h
+-
+unistd.h
+-
+stdint.h
 -
 

@@ -61,7 +61,7 @@ CMAKE_BINARY_DIR = /home/fred/workspace/sylar/build
 
 # Special rule for the target rebuild_cache
 rebuild_cache:
-	@echo "Running CMake to regenerate build system..."
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
 	/usr/bin/cmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : rebuild_cache
 
@@ -72,7 +72,7 @@ rebuild_cache/fast: rebuild_cache
 
 # Special rule for the target edit_cache
 edit_cache:
-	@echo "Running CMake cache editor..."
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake cache editor..."
 	/usr/bin/ccmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : edit_cache
 
@@ -166,6 +166,33 @@ sylar/log.cc.s:
 	$(MAKE) -f CMakeFiles/sylar.dir/build.make CMakeFiles/sylar.dir/sylar/log.cc.s
 .PHONY : sylar/log.cc.s
 
+sylar/util.o: sylar/util.cc.o
+
+.PHONY : sylar/util.o
+
+# target to build an object file
+sylar/util.cc.o:
+	$(MAKE) -f CMakeFiles/sylar.dir/build.make CMakeFiles/sylar.dir/sylar/util.cc.o
+.PHONY : sylar/util.cc.o
+
+sylar/util.i: sylar/util.cc.i
+
+.PHONY : sylar/util.i
+
+# target to preprocess a source file
+sylar/util.cc.i:
+	$(MAKE) -f CMakeFiles/sylar.dir/build.make CMakeFiles/sylar.dir/sylar/util.cc.i
+.PHONY : sylar/util.cc.i
+
+sylar/util.s: sylar/util.cc.s
+
+.PHONY : sylar/util.s
+
+# target to generate assembly for a file
+sylar/util.cc.s:
+	$(MAKE) -f CMakeFiles/sylar.dir/build.make CMakeFiles/sylar.dir/sylar/util.cc.s
+.PHONY : sylar/util.cc.s
+
 tests/test.o: tests/test.cc.o
 
 .PHONY : tests/test.o
@@ -206,6 +233,9 @@ help:
 	@echo "... sylar/log.o"
 	@echo "... sylar/log.i"
 	@echo "... sylar/log.s"
+	@echo "... sylar/util.o"
+	@echo "... sylar/util.i"
+	@echo "... sylar/util.s"
 	@echo "... tests/test.o"
 	@echo "... tests/test.i"
 	@echo "... tests/test.s"
