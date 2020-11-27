@@ -13,6 +13,7 @@
 #include <map>
 
 #include "singleton.h"
+#include "util.h"
 
 // 添加宏定义
 #define SYLAR_LOG_LEVEL(logger, level) \
@@ -38,7 +39,7 @@
 #define SYLAR_LOG_FMT_ERROR(logger, fmt, ...) SYLAR_LOG_FMT_LEVEL(logger, sylar::LogLevel::ERROR, fmt, __VA_ARGS__)
 #define SYLAR_LOG_FMT_FATAL(logger, fmt, ...) SYLAR_LOG_FMT_LEVEL(logger, sylar::LogLevel::FATAL, fmt, __VA_ARGS__)
 
-
+#define SYLAR_LOG_ROOT() sylar::LoggerMgr::GetInstance()->getRoot()
 
 namespace sylar {
 class Logger;
@@ -59,6 +60,10 @@ public:
 };
 
 // 日志事件
+/*
+LogEvent记录当前日志事件，包括与日志相关的系统信息，日志等级。
+并将当前日志事件与具体的logger对象关联起来。
+*/
 class LogEvent{
 public:
     typedef std::shared_ptr<LogEvent> ptr;
@@ -110,6 +115,9 @@ private:
 
 
 // 日志格式器
+/*
+日志格式解析器，根据输入的pattern转换为要求的输出信息
+*/
 class LogFormatter{
 public:
     typedef std::shared_ptr<LogFormatter> ptr;
@@ -134,6 +142,9 @@ private:
 };
 
 // 日志输出地
+/*
+虚基类，用于定义日志的输出目的地的类，并管理不同输出目的地的日志格式以及日志等级
+*/
 class LogAppender{
 public:
     typedef std::shared_ptr<LogAppender> ptr;
@@ -153,6 +164,9 @@ protected:
 };
 
 // 日志器
+/*
+Logger类记录当前日志的等级level与日志事件event,并管理日志的输出器与日志格式
+*/
 class Logger : public std::enable_shared_from_this<Logger> {
 public:
     typedef std::shared_ptr<Logger> ptr;
@@ -164,7 +178,7 @@ public:
     void debug(LogEvent::ptr event);
     void info(LogEvent::ptr event);
     void warn(LogEvent::ptr event);
-    void error(LogEvent::ptr event);
+    void error(LogEvent::ptr event); 
     void fatal(LogEvent::ptr event);
 
     // 增加appender
@@ -215,6 +229,8 @@ public:
 
     // 初始化Logger
     void init();
+
+    Logger::ptr getRoot() const { return m_root; }
 private:
     std::map<std::string, Logger::ptr> m_loggers;
 

@@ -63,13 +63,50 @@ CMAKE_SOURCE_DIR = /home/fred/workspace/sylar
 CMAKE_BINARY_DIR = /home/fred/workspace/sylar/build
 
 #=============================================================================
+# Target rules for target CMakeFiles/main_config.dir
+
+# All Build rule for target.
+CMakeFiles/main_config.dir/all: CMakeFiles/sylar.dir/all
+	$(MAKE) -f CMakeFiles/main_config.dir/build.make CMakeFiles/main_config.dir/depend
+	$(MAKE) -f CMakeFiles/main_config.dir/build.make CMakeFiles/main_config.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/fred/workspace/sylar/build/CMakeFiles --progress-num=3,4 "Built target main_config"
+.PHONY : CMakeFiles/main_config.dir/all
+
+# Include target in all.
+all: CMakeFiles/main_config.dir/all
+
+.PHONY : all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/main_config.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/fred/workspace/sylar/build/CMakeFiles 6
+	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/main_config.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/fred/workspace/sylar/build/CMakeFiles 0
+.PHONY : CMakeFiles/main_config.dir/rule
+
+# Convenience name for target.
+main_config: CMakeFiles/main_config.dir/rule
+
+.PHONY : main_config
+
+# clean rule for target.
+CMakeFiles/main_config.dir/clean:
+	$(MAKE) -f CMakeFiles/main_config.dir/build.make CMakeFiles/main_config.dir/clean
+.PHONY : CMakeFiles/main_config.dir/clean
+
+# clean rule for target.
+clean: CMakeFiles/main_config.dir/clean
+
+.PHONY : clean
+
+#=============================================================================
 # Target rules for target CMakeFiles/sylar.dir
 
 # All Build rule for target.
 CMakeFiles/sylar.dir/all:
 	$(MAKE) -f CMakeFiles/sylar.dir/build.make CMakeFiles/sylar.dir/depend
 	$(MAKE) -f CMakeFiles/sylar.dir/build.make CMakeFiles/sylar.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/fred/workspace/sylar/build/CMakeFiles --progress-num=3,4,5 "Built target sylar"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/fred/workspace/sylar/build/CMakeFiles --progress-num=5,6,7,8 "Built target sylar"
 .PHONY : CMakeFiles/sylar.dir/all
 
 # Include target in all.
@@ -79,7 +116,7 @@ all: CMakeFiles/sylar.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/sylar.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/fred/workspace/sylar/build/CMakeFiles 3
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/fred/workspace/sylar/build/CMakeFiles 4
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/sylar.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/fred/workspace/sylar/build/CMakeFiles 0
 .PHONY : CMakeFiles/sylar.dir/rule
@@ -116,7 +153,7 @@ all: CMakeFiles/main.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/main.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/fred/workspace/sylar/build/CMakeFiles 5
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/fred/workspace/sylar/build/CMakeFiles 6
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/main.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/fred/workspace/sylar/build/CMakeFiles 0
 .PHONY : CMakeFiles/main.dir/rule

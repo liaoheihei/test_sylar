@@ -214,87 +214,93 @@ const char* LogLevel::ToString(LogLevel::Level level){
 
 
 /////////////////////////////////////Logger/////////////////////////////////////
-    Logger::Logger(const std::string& name) 
-        : m_name(name)
-        ,m_level(LogLevel::DEBUG){
-        // 设置默认的日志格式
-        m_formatter.reset(new LogFormatter("%d%T%t%T%F%T[%p]%T[%c]%T%f:%l%T%m%n"));
-    }
+Logger::Logger(const std::string& name)
+    : m_name(name), m_level(LogLevel::DEBUG) {
+    // 设置默认的日志格式
+    m_formatter.reset(new LogFormatter("%d%T%t%T%F%T[%p]%T[%c]%T%f:%l%T%m%n"));
+}
 
-    void Logger::log(LogLevel::Level level, LogEvent::ptr event) {
-        if (level >= m_level) {
-            // 通过shared_from_this把自身的指针作为参数进行传递
-            auto self = shared_from_this();
-            for (auto& i : m_appenders) {
-                i->log(self, level, event);
-            }
+void Logger::log(LogLevel::Level level, LogEvent::ptr event) {
+    if (level >= m_level) {
+        // 通过shared_from_this把自身的指针作为参数进行传递
+        auto self = shared_from_this();
+        // 遍历当前所拥有的输出器，逐个输出日志
+        for (auto& i : m_appenders) {
+            i->log(self, level, event);
         }
     }
+}
 
-    // 增加appender
-    void Logger::addAppender(LogAppender::ptr appender){
-        // 若记录日志时没有指定日志格式，使用默认的日志格式
-        if(!appender->getFormmater()){
-            appender->setFormatter(m_formatter);
+// 增加appender
+void Logger::addAppender(LogAppender::ptr appender) {
+    // 若记录日志时没有指定日志格式，使用默认的日志格式
+    if (!appender->getFormmater()) {
+        appender->setFormatter(m_formatter);
+    }
+    // 将当前输出器加入到logger的输出器集合中
+    m_appenders.push_back(appender);
+}
+// 删除指定appender
+void Logger::delAppender(LogAppender::ptr appender) {
+    for (auto it = m_appenders.begin(); it != m_appenders.end(); ++it) {
+        if (*it == appender) {
+            m_appenders.erase(it);
+            break;
         }
-        m_appenders.push_back(appender);
     }
-    // 删除appender
-    void Logger::delAppender(LogAppender::ptr appender){
-        for(auto it = m_appenders.begin(); it != m_appenders.end(); ++it){
-            if(*it == appender){
-                m_appenders.erase(it);
-                break;
-            }
-        }
-    }
+}
 
-    // 每一个级别对应单独的方法
-    void Logger::debug(LogEvent::ptr event) {
-        log(LogLevel::DEBUG, event);
-    }
+// 每一个级别对应单独的方法
+void Logger::debug(LogEvent::ptr event) {
+    log(LogLevel::DEBUG, event);
+}
 
-    void Logger::info(LogEvent::ptr event) {
-        log(LogLevel::INFO, event);
-    }
+void Logger::info(LogEvent::ptr event) {
+    log(LogLevel::INFO, event);
+}
 
-    void Logger::warn(LogEvent::ptr event){
-        log(LogLevel::WARN, event);
-    }
+void Logger::warn(LogEvent::ptr event) {
+    log(LogLevel::WARN, event);
+}
 
-    void Logger::error(LogEvent::ptr event){
-        log(LogLevel::ERROR, event);
-    }
+void Logger::error(LogEvent::ptr event) {
+    log(LogLevel::ERROR, event);
+}
 
-    void Logger::fatal(LogEvent::ptr event){
-        log(LogLevel::FATAL, event);
-    }
+void Logger::fatal(LogEvent::ptr event) {
+    log(LogLevel::FATAL, event);
+}
 
 /////////////////////////////////////FileLogAppender/////////////////////////////////////
-    FileLogAppender::FileLogAppender(const std::string& filename)
-        : m_filename(filename) {
-            reopen();
-    }
+FileLogAppender::FileLogAppender(const std::string& filename)
+    : m_filename(filename) {
+    reopen();
+}
 
-    void FileLogAppender::log(std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event) {
-        if (level >= m_level) {
-            m_filestream << m_formatter->format(logger, level, event);
-        }
+void FileLogAppender::log(std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event) {
+    if (level >= m_level) {
+        // 将格式化后的日志输出到文件中
+        m_filestream << m_formatter->format(logger, level, event);
     }
+}
 
-    bool FileLogAppender::reopen() {
-        if (m_filestream) {
-            m_filestream.close();
-        }
-        m_filestream.open(m_filename);
-        return !m_filestream;
+bool FileLogAppender::reopen() {
+    // 判断当前appender是否已打开了文件
+    if (m_filestream) {
+        m_filestream.close();
     }
+    m_filestream.open(m_filename);
+    return !m_filestream;
+}
 
-    void StdoutLogAppender::log(std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event) {
-        if (level >= m_level) {
-            std::cout << m_formatter->format(logger, level, event);
-        }
+/////////////////////////////////////StdoutLogAppender/////////////////////////////////////
+
+void StdoutLogAppender::log(std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event) {
+    if (level >= m_level) {
+        // StdoutLogAppender类直接在控制台进行输出
+        std::cout << m_formatter->format(logger, level, event);
     }
+}
 
 /////////////////////////////////////LogFormatter/////////////////////////////////////
 LogFormatter::LogFormatter(const std::string& pattern) : m_pattern(pattern){

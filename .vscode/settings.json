@@ -46,6 +46,13 @@
         "functional": "cpp",
         "iterator": "cpp",
         "map": "cpp",
-        "ratio": "cpp"
+        "ratio": "cpp",
+        "cstring": "cpp",
+        "strstream": "cpp",
+        "complex": "cpp",
+        "set": "cpp",
+        "iomanip": "cpp",
+        "cfenv": "cpp",
+        "cinttypes": "cpp"
     }
 }

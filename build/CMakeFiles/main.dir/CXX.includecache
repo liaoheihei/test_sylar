@@ -29,6 +29,8 @@ map
 -
 singleton.h
 /home/fred/workspace/sylar/sylar/singleton.h
+util.h
+/home/fred/workspace/sylar/sylar/util.h
 
 /home/fred/workspace/sylar/sylar/singleton.h
 memory

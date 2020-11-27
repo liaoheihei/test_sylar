@@ -4,9 +4,15 @@ project(sylar)
 set(CMAKE_VERBOSE_MAKEFILE ON)
 set(CMAKE_CXX_FLAGS "$ENV{CXXFLAGS} -rdynamic -O0 -fPIC -ggdb -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -Wno-deprecated-declarations")
 
+include_directories(.)
+
+find_library(YAMLCPP yaml-cpp)
+message("***", ${YAMLCPP})
+
 set(LIB_SRC
     sylar/log.cc
     sylar/util.cc
+    sylar/config.cc
     )
 
 add_library(sylar SHARED ${LIB_SRC})
@@ -16,6 +22,10 @@ add_library(sylar SHARED ${LIB_SRC})
 add_executable(main tests/test.cc)
 add_dependencies(main sylar)
 target_link_libraries(main sylar ${YAMLCPP})
+
+add_executable(main_config tests/test_config.cc)
+add_dependencies(main_config sylar)
+target_link_libraries(main_config sylar ${YAMLCPP})
 
 SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 SET(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)

@@ -1,0 +1,27 @@
+[
+{
+  "directory": "/home/fred/workspace/sylar/build",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7   -I/home/fred/workspace/sylar/.   -rdynamic -O0 -fPIC -ggdb -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -Wno-deprecated-declarations -g   -o CMakeFiles/main_config.dir/tests/test_config.cc.o -c /home/fred/workspace/sylar/tests/test_config.cc",
+  "file": "/home/fred/workspace/sylar/tests/test_config.cc"
+},
+{
+  "directory": "/home/fred/workspace/sylar/build",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -Dsylar_EXPORTS -I/home/fred/workspace/sylar/.   -rdynamic -O0 -fPIC -ggdb -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -Wno-deprecated-declarations -g -fPIC   -o CMakeFiles/sylar.dir/sylar/log.cc.o -c /home/fred/workspace/sylar/sylar/log.cc",
+  "file": "/home/fred/workspace/sylar/sylar/log.cc"
+},
+{
+  "directory": "/home/fred/workspace/sylar/build",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -Dsylar_EXPORTS -I/home/fred/workspace/sylar/.   -rdynamic -O0 -fPIC -ggdb -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -Wno-deprecated-declarations -g -fPIC   -o CMakeFiles/sylar.dir/sylar/util.cc.o -c /home/fred/workspace/sylar/sylar/util.cc",
+  "file": "/home/fred/workspace/sylar/sylar/util.cc"
+},
+{
+  "directory": "/home/fred/workspace/sylar/build",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7  -Dsylar_EXPORTS -I/home/fred/workspace/sylar/.   -rdynamic -O0 -fPIC -ggdb -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -Wno-deprecated-declarations -g -fPIC   -o CMakeFiles/sylar.dir/sylar/config.cc.o -c /home/fred/workspace/sylar/sylar/config.cc",
+  "file": "/home/fred/workspace/sylar/sylar/config.cc"
+},
+{
+  "directory": "/home/fred/workspace/sylar/build",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7   -I/home/fred/workspace/sylar/.   -rdynamic -O0 -fPIC -ggdb -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -Wno-deprecated-declarations -g   -o CMakeFiles/main.dir/tests/test.cc.o -c /home/fred/workspace/sylar/tests/test.cc",
+  "file": "/home/fred/workspace/sylar/tests/test.cc"
+}
+]

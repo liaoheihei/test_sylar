@@ -6,10 +6,6 @@
 
 #IncludeRegexTransform: 
 
-/home/fred/workspace/sylar/sylar/config.cc
-config.h
-/home/fred/workspace/sylar/sylar/config.h
-
 /home/fred/workspace/sylar/sylar/config.h
 memory
 -
@@ -23,20 +19,6 @@ yaml-cpp/yaml.h
 -
 log.h
 /home/fred/workspace/sylar/sylar/log.h
-
-/home/fred/workspace/sylar/sylar/log.cc
-log.h
-/home/fred/workspace/sylar/sylar/log.h
-map
--
-functional
--
-iostream
--
-time.h
--
-string.h
--
 
 /home/fred/workspace/sylar/sylar/log.h
 string
@@ -68,15 +50,19 @@ util.h
 memory
 -
 
-/home/fred/workspace/sylar/sylar/util.cc
-util.h
-/home/fred/workspace/sylar/sylar/util.h
-
 /home/fred/workspace/sylar/sylar/util.h
 sys/syscall.h
 -
 unistd.h
 -
 stdint.h
+-
+
+/home/fred/workspace/sylar/tests/test_config.cc
+../sylar/config.h
+/home/fred/workspace/sylar/sylar/config.h
+../sylar/log.h
+/home/fred/workspace/sylar/sylar/log.h
+yaml-cpp/yaml.h
 -
 
