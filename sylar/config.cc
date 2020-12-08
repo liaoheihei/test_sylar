@@ -5,7 +5,7 @@ namespace sylar {
 
 /////////////////////////////////////Config/////////////////////////////////////
 // 实例化m_datas静态变量
-Config::ConfigVarMap Config::m_datas;
+//Config::ConfigVarMap Config::m_datas;
 
 
 // ConfigVarBase::ptr Config::LookupBase(const std::string& name) {

@@ -336,8 +336,8 @@ public:
     template <class T>
     static typename ConfigVar<T>::ptr Lookup(const std::string& name,
                                              const T& default_value, const std::string& description = "") {
-        auto it = m_datas.find(name);
-        if(it != m_datas.end()) {
+        auto it = GetDatas().find(name);
+        if(it != GetDatas().end()) {
             // 将基类ConfigVarBase指针向下转换为ConfigVar<T>指针
             auto tmp  = std::dynamic_pointer_cast<ConfigVar<T> >(it->second);
             if(tmp) {
@@ -362,14 +362,14 @@ public:
             throw std::invalid_argument(name);
         }
         typename ConfigVar<T>::ptr v(new ConfigVar<T>(name, default_value, description));
-        m_datas[name] = v;
+        GetDatas()[name] = v;
         return v;
     }
 
     template<class T>
     static typename ConfigVar<T>::ptr Lookup(const std::string& name) {
-        auto it = m_datas.find(name);
-        if(it == m_datas.end()) {
+        auto it = GetDatas().find(name);
+        if(it == GetDatas().end()) {
             return nullptr;
         }
         return std::dynamic_pointer_cast<ConfigVar<T> >(it->second);
@@ -379,12 +379,15 @@ public:
 
     // 查找是否存在名称为name的node
     static ConfigVarBase::ptr LookupBase(const std::string& name) {
-        auto it = m_datas.find(name);
-        return it == m_datas.end() ? nullptr : it->second;
+        auto it = GetDatas().find(name);
+        return it == GetDatas().end() ? nullptr : it->second;
     }
 
 private:
-    static ConfigVarMap m_datas;
+    static ConfigVarMap& GetDatas() {
+        static ConfigVarMap m_datas;
+        return m_datas;
+    }
 };
 
 }

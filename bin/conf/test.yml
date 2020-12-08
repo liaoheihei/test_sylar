@@ -1,0 +1,48 @@
+logs:
+    - name: root
+      level: info
+      formatter: "%d%T%m%n"
+      appender:
+          - type: FileLogAppender
+            file: log.txt
+          - type: StdoutLogAppender
+    - name: system
+      level: debug
+      formatter: "%d%T%m%n"
+      appender:
+          - type: FileLogAppender
+            file: log.txt
+          - type: StdoutLogAppender
+system:
+    port: 9900
+    value: 15.0
+    int_vec:
+        - 10
+        - 20
+        - 30
+    int_list: [20,40,60]
+    int_set: [70,50,20,30]
+    int_unordered_set: [30,50,10,40]
+    str_int_map:
+        k: 30
+        k2: 20
+        k3: 10
+    str_int_umap:
+        m: 40
+        m2: 70
+        m3: 10
+
+class:
+    person:
+        name: "sylar"
+        age: 31
+        sex: true
+    map:
+      sylar01:
+          name: sylar01
+          age: 18
+          sex: false
+      sylar02:
+          name: sylar02
+          age: 40
+          sex: true

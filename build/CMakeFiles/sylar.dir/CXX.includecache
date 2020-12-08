@@ -41,6 +41,8 @@ log.h
 /home/fred/workspace/sylar/sylar/log.cc
 log.h
 /home/fred/workspace/sylar/sylar/log.h
+config.h
+/home/fred/workspace/sylar/sylar/config.h
 map
 -
 functional
