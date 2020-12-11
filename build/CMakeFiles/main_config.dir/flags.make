@@ -8,3 +8,5 @@ CXX_DEFINES =
 
 CXX_INCLUDES = -I/home/fred/workspace/sylar/. 
 
+# Custom defines: CMakeFiles/main_config.dir/tests/test_config.cc.o_DEFINES = __FILE__="tests/test_config.cc"
+

@@ -263,6 +263,10 @@ public:
 
                     } else if(type == "StdoutLogAppender"){
                         lad.type = 2;
+
+                        if(a["formatter"].IsDefined()) {
+                            lad.formatter = a["formatter"].as<std::string>();
+                        }
                     } else {
                         std::cout << "log config error: appender type is invalid, " << a << std::endl;
                         continue;
@@ -358,6 +362,15 @@ struct LogIniter {
                         ap.reset(new StdoutLogAppender);
                     }
                     ap->setLevel(a.level);
+                    if(!a.formatter.empty()) {
+                        LogFormatter::ptr fmt(new LogFormatter(a.formatter));
+                        if(!fmt->isError()) {
+                            ap->setFormatter(fmt);
+                        } else {
+                            std::cout << "log.name" <<i.name << "appender type=" << a.type 
+                                      << " formatter=" << a.formatter << " is invalid" << std::endl;
+                        }
+                    }
                     logger->addAppender(ap);
                 }
             }
@@ -478,7 +491,7 @@ void Logger::log(LogLevel::Level level, LogEvent::ptr event) {
 void Logger::addAppender(LogAppender::ptr appender) {
     // 若记录日志时没有指定日志格式，使用默认的日志格式
     if (!appender->getFormmater()) {
-        appender->setFormatter(m_formatter);
+        appender->m_formatter = m_formatter;
     }
     // 将当前输出器加入到logger的输出器集合中
     m_appenders.push_back(appender);
@@ -500,6 +513,13 @@ void Logger::clearAppender() {
 
 void Logger::setFormatter(LogFormatter::ptr val) {
     m_formatter = val;
+
+    // 将logger的appender内的formatter与logger的formatter保持一致
+    for(auto& i : m_appenders) {
+        if(!i->m_hasFormatter) {
+            i->m_formatter = m_formatter;
+        }
+    }
 }
 
 void Logger::setFormatter(const std::string& val) {
@@ -511,7 +531,8 @@ void Logger::setFormatter(const std::string& val) {
                   << std::endl;
         return;
     }
-    m_formatter = new_val;
+    // m_formatter = new_val;
+    setFormatter(new_val);
 }
 
 LogFormatter::ptr Logger::getFormatter() {
@@ -575,7 +596,8 @@ bool FileLogAppender::reopen() {
     if (m_filestream) {
         m_filestream.close();
     }
-    m_filestream.open(m_filename);
+    // 以追加写的模式打开文件
+    m_filestream.open(m_filename, std::ios_base::app);
     return !m_filestream;
 }
 
@@ -586,7 +608,7 @@ std::string FileLogAppender::toYamlString() {
     if(m_level != LogLevel::UNKNOW) {
         node["level"] = LogLevel::ToString(m_level);
     }
-    if(m_formatter){
+    if(m_hasFormatter && m_formatter){
         node["formatter"] = m_formatter->getPattern();
     }
     std::stringstream ss;
@@ -609,7 +631,7 @@ std::string StdoutLogAppender::toYamlString() {
     if(m_level != LogLevel::UNKNOW) {
         node["level"] = LogLevel::ToString(m_level);
     }
-    if (m_formatter) {
+    if (m_hasFormatter && m_formatter) {
         node["formatter"] = m_formatter->getPattern();
     }
     std::stringstream ss;
@@ -621,12 +643,23 @@ LogFormatter::LogFormatter(const std::string& pattern) : m_pattern(pattern){
     init();
 }
 
+
+
 std::string LogFormatter::format(std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event){
     std::stringstream ss;
     for(auto& i : m_items){
         i->format(ss, logger, level, event);
     }
     return ss.str();
+}
+
+void LogAppender::setFormatter(LogFormatter::ptr val) {
+    m_formatter = val;
+    if(m_formatter) {
+        m_hasFormatter = true;
+    } else {
+        m_hasFormatter = false;
+    }
 }
 
 void LogFormatter::init(){

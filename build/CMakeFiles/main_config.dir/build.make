@@ -63,15 +63,15 @@ include CMakeFiles/main_config.dir/flags.make
 CMakeFiles/main_config.dir/tests/test_config.cc.o: CMakeFiles/main_config.dir/flags.make
 CMakeFiles/main_config.dir/tests/test_config.cc.o: ../tests/test_config.cc
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/fred/workspace/sylar/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/main_config.dir/tests/test_config.cc.o"
-	/usr/bin/x86_64-linux-gnu-g++-7  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/main_config.dir/tests/test_config.cc.o -c /home/fred/workspace/sylar/tests/test_config.cc
+	/usr/bin/x86_64-linux-gnu-g++-7  $(CXX_DEFINES) -D__FILE__=\"tests/test_config.cc\" $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/main_config.dir/tests/test_config.cc.o -c /home/fred/workspace/sylar/tests/test_config.cc
 
 CMakeFiles/main_config.dir/tests/test_config.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/main_config.dir/tests/test_config.cc.i"
-	/usr/bin/x86_64-linux-gnu-g++-7 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/fred/workspace/sylar/tests/test_config.cc > CMakeFiles/main_config.dir/tests/test_config.cc.i
+	/usr/bin/x86_64-linux-gnu-g++-7 $(CXX_DEFINES) -D__FILE__=\"tests/test_config.cc\" $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/fred/workspace/sylar/tests/test_config.cc > CMakeFiles/main_config.dir/tests/test_config.cc.i
 
 CMakeFiles/main_config.dir/tests/test_config.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/main_config.dir/tests/test_config.cc.s"
-	/usr/bin/x86_64-linux-gnu-g++-7 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/fred/workspace/sylar/tests/test_config.cc -o CMakeFiles/main_config.dir/tests/test_config.cc.s
+	/usr/bin/x86_64-linux-gnu-g++-7 $(CXX_DEFINES) -D__FILE__=\"tests/test_config.cc\" $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/fred/workspace/sylar/tests/test_config.cc -o CMakeFiles/main_config.dir/tests/test_config.cc.s
 
 CMakeFiles/main_config.dir/tests/test_config.cc.o.requires:
 
