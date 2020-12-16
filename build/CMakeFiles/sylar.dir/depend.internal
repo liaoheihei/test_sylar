@@ -13,6 +13,12 @@ CMakeFiles/sylar.dir/sylar/log.cc.o
  /home/fred/workspace/sylar/sylar/log.h
  /home/fred/workspace/sylar/sylar/singleton.h
  /home/fred/workspace/sylar/sylar/util.h
+CMakeFiles/sylar.dir/sylar/thread.cc.o
+ /home/fred/workspace/sylar/sylar/log.h
+ /home/fred/workspace/sylar/sylar/singleton.h
+ /home/fred/workspace/sylar/sylar/thread.cc
+ /home/fred/workspace/sylar/sylar/thread.h
+ /home/fred/workspace/sylar/sylar/util.h
 CMakeFiles/sylar.dir/sylar/util.cc.o
  /home/fred/workspace/sylar/sylar/util.cc
  /home/fred/workspace/sylar/sylar/util.h
