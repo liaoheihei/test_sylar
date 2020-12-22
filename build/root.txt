@@ -1,0 +1,72 @@
+2020-12-22 21:06:35	name=class.vec_map description=System vec map person typebane=St3mapINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt6vectorI6PersonSaIS7_EESt4lessIS5_ESaISt4pairIKS5_S9_EEE value=
+2020-12-22 21:06:35	name=class.map description=System map person typebane=St3mapINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE6PersonSt4lessIS5_ESaISt4pairIKS5_S6_EEE value=
+2020-12-22 21:06:35	name=class.person description=System person typebane=6Person value=name: Fred
+age: 0
+sex: false
+2020-12-22 21:06:35	name=system.str_int_map description=system str int map typebane=St3mapINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEiSt4lessIS5_ESaISt4pairIKS5_iEEE value=k: 2
+2020-12-22 21:06:35	name=system.int_unordered_set description=system int unordered set typebane=St13unordered_setIiSt4hashIiESt8equal_toIiESaIiEE value=- 1
+- 2
+- 3
+2020-12-22 21:06:35	name=system.str_int_umap description=system str int umap typebane=St13unordered_mapINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEiSt4hashIS5_ESt8equal_toIS5_ESaISt4pairIKS5_iEEE value=k: 2
+2020-12-22 21:06:35	name=logs description=logs config typebane=St3setIN5sylar9LogDefineESt4lessIS1_ESaIS1_EE value=- name: root
+  level: INFO
+  formatter: "%d%T%m%n"
+  appenders:
+    - type: FileLogAppender
+      file: root.txt
+    - type: StdoutLogAppender
+- name: system
+  level: DEBUG
+  formatter: "%d%T%m%n"
+  appenders:
+    - type: FileLogAppender
+      file: system.txt
+      formatter: "%d%T[%p]%T%m%n"
+    - type: StdoutLogAppender
+2020-12-22 21:06:35	name=system.value description=system value typebane=f value=10.1999998
+2020-12-22 21:06:35	name=system.port description=system port typebane=f value=8080
+2020-12-22 21:06:35	name=system.int_list description=system int list typebane=NSt7__cxx114listIiSaIiEEE value=- 1
+- 2
+- 3
+2020-12-22 21:06:35	name=system.int_vec description=system int vector typebane=St6vectorIiSaIiEE value=- 1
+- 2
+- 3
+2020-12-22 21:06:35	name=system.int_set description=system int set typebane=St3setIiSt4lessIiESaIiEE value=- 1
+- 2
+- 3
+2020-12-22 21:11:02	name=class.vec_map description=System vec map person typebane=St3mapINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt6vectorI6PersonSaIS7_EESt4lessIS5_ESaISt4pairIKS5_S9_EEE value=
+2020-12-22 21:11:02	name=class.map description=System map person typebane=St3mapINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE6PersonSt4lessIS5_ESaISt4pairIKS5_S6_EEE value=
+2020-12-22 21:11:02	name=class.person description=System person typebane=6Person value=name: Fred
+age: 0
+sex: false
+2020-12-22 21:11:02	name=system.str_int_map description=system str int map typebane=St3mapINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEiSt4lessIS5_ESaISt4pairIKS5_iEEE value=k: 2
+2020-12-22 21:11:02	name=system.int_unordered_set description=system int unordered set typebane=St13unordered_setIiSt4hashIiESt8equal_toIiESaIiEE value=- 1
+- 2
+- 3
+2020-12-22 21:11:02	name=system.str_int_umap description=system str int umap typebane=St13unordered_mapINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEiSt4hashIS5_ESt8equal_toIS5_ESaISt4pairIKS5_iEEE value=k: 2
+2020-12-22 21:11:02	name=logs description=logs config typebane=St3setIN5sylar9LogDefineESt4lessIS1_ESaIS1_EE value=- name: root
+  level: INFO
+  formatter: "%d%T%m%n"
+  appenders:
+    - type: FileLogAppender
+      file: root.txt
+    - type: StdoutLogAppender
+- name: system
+  level: DEBUG
+  formatter: "%d%T%m%n"
+  appenders:
+    - type: FileLogAppender
+      file: system.txt
+      formatter: "%d%T[%p]%T%m%n"
+    - type: StdoutLogAppender
+2020-12-22 21:11:02	name=system.value description=system value typebane=f value=10.1999998
+2020-12-22 21:11:02	name=system.port description=system port typebane=f value=8080
+2020-12-22 21:11:02	name=system.int_list description=system int list typebane=NSt7__cxx114listIiSaIiEEE value=- 1
+- 2
+- 3
+2020-12-22 21:11:02	name=system.int_vec description=system int vector typebane=St6vectorIiSaIiEE value=- 1
+- 2
+- 3
+2020-12-22 21:11:02	name=system.int_set description=system int set typebane=St3setIiSt4lessIiESaIiEE value=- 1
+- 2
+- 3

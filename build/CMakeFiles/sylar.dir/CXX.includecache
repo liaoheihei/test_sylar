@@ -37,6 +37,8 @@ functional
 -
 log.h
 /home/fred/workspace/sylar/sylar/log.h
+thread.h
+/home/fred/workspace/sylar/sylar/thread.h
 
 /home/fred/workspace/sylar/sylar/log.cc
 log.h
@@ -79,6 +81,8 @@ singleton.h
 /home/fred/workspace/sylar/sylar/singleton.h
 util.h
 /home/fred/workspace/sylar/sylar/util.h
+thread.h
+/home/fred/workspace/sylar/sylar/thread.h
 
 /home/fred/workspace/sylar/sylar/singleton.h
 memory
@@ -104,6 +108,8 @@ pthread.h
 semaphore.h
 -
 stdint.h
+-
+atomic
 -
 
 /home/fred/workspace/sylar/sylar/util.cc

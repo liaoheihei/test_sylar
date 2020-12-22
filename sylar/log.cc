@@ -175,6 +175,7 @@ LoggerManager::LoggerManager() {
 }
 
 std::string LoggerManager::toYamlString() {
+    Mutextype::Lock lock(m_mutex);
     YAML::Node node;
     for(auto& i : m_loggers) {
         node.push_back(YAML::Load(i.second->toYamlString()));
@@ -183,6 +184,19 @@ std::string LoggerManager::toYamlString() {
     std::stringstream ss;
     ss << node;
     return ss.str();
+}
+
+Logger::ptr LoggerManager::getLogger(const std::string& name) {
+    Mutextype::Lock lock(m_mutex);
+    auto it = m_loggers.find(name);
+    if(it != m_loggers.end()) {
+        return it->second;
+    }
+    
+    Logger::ptr logger(new Logger(name));
+    logger->m_root = m_root;
+    m_loggers[name] = logger;
+    return logger;
 }
 
 /*
@@ -331,7 +345,7 @@ sylar::ConfigVar<std::set<LogDefine> >::ptr g_log_defines =
 struct LogIniter {
     // 当事件进来时，触发该函数
     LogIniter() {
-        g_log_defines->addListener(0xF1E231, [](const std::set<LogDefine>& old_value, 
+        g_log_defines->addListener([](const std::set<LogDefine>& old_value, 
             const std::set<LogDefine>& new_value) {
             SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << "on_logger_conf_changed";
             // 新增日志
@@ -395,19 +409,6 @@ static LogIniter __log_init;
 void LoggerManager::init() {
     
 }
-
-Logger::ptr LoggerManager::getLogger(const std::string& name) {
-    auto it = m_loggers.find(name);
-    if(it != m_loggers.end()) {
-        return it->second;
-    }
-    
-    Logger::ptr logger(new Logger(name));
-    logger->m_root = m_root;
-    m_loggers[name] = logger;
-    return logger;
-}
-
 
  /////////////////////////////////////LogEventWrap/////////////////////////////////////
 LogEventWrap::LogEventWrap(LogEvent::ptr e)
@@ -474,7 +475,7 @@ void Logger::log(LogLevel::Level level, LogEvent::ptr event) {
     if (level >= m_level) {
         // 通过shared_from_this把自身的指针作为参数进行传递
         auto self = shared_from_this();
-
+        MutexType::Lock lock(m_mutex);
         if (!m_appenders.empty()) {
             // 遍历当前所拥有的输出器，逐个输出日志
             for (auto& i : m_appenders) {
@@ -489,8 +490,10 @@ void Logger::log(LogLevel::Level level, LogEvent::ptr event) {
 
 // 增加appender
 void Logger::addAppender(LogAppender::ptr appender) {
+    MutexType::Lock lock(m_mutex);
     // 若记录日志时没有指定日志格式，使用默认的日志格式
     if (!appender->getFormmater()) {
+        MutexType::Lock lock2(appender->m_mutex);
         appender->m_formatter = m_formatter;
     }
     // 将当前输出器加入到logger的输出器集合中
@@ -498,6 +501,7 @@ void Logger::addAppender(LogAppender::ptr appender) {
 }
 // 删除指定appender
 void Logger::delAppender(LogAppender::ptr appender) {
+    MutexType::Lock lock(m_mutex);
     for (auto it = m_appenders.begin(); it != m_appenders.end(); ++it) {
         if (*it == appender) {
             m_appenders.erase(it);
@@ -512,10 +516,12 @@ void Logger::clearAppender() {
 }
 
 void Logger::setFormatter(LogFormatter::ptr val) {
+    MutexType::Lock lock(m_mutex);
     m_formatter = val;
 
     // 将logger的appender内的formatter与logger的formatter保持一致
     for(auto& i : m_appenders) {
+        MutexType::Lock lock2(i->m_mutex);
         if(!i->m_hasFormatter) {
             i->m_formatter = m_formatter;
         }
@@ -536,10 +542,12 @@ void Logger::setFormatter(const std::string& val) {
 }
 
 LogFormatter::ptr Logger::getFormatter() {
+    MutexType::Lock lock(m_mutex);
     return m_formatter;
 }
 
 std::string Logger::toYamlString() {
+    MutexType::Lock lock(m_mutex);
     YAML::Node node;
     node["name"] = m_name;
     if(m_level != LogLevel::UNKNOW) {
@@ -586,12 +594,20 @@ FileLogAppender::FileLogAppender(const std::string& filename)
 
 void FileLogAppender::log(std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event) {
     if (level >= m_level) {
+        uint64_t now = time(0);
+        if(now != m_lastTime) {
+            // 写文件时周期性reopen文件，防止文件被删除
+            reopen();
+            m_lastTime = now;
+        }
         // 将格式化后的日志输出到文件中
+        MutexType::Lock lock(m_mutex);
         m_filestream << m_formatter->format(logger, level, event);
     }
 }
 
 bool FileLogAppender::reopen() {
+    MutexType::Lock lock(m_mutex);
     // 判断当前appender是否已打开了文件
     if (m_filestream) {
         m_filestream.close();
@@ -602,6 +618,7 @@ bool FileLogAppender::reopen() {
 }
 
 std::string FileLogAppender::toYamlString() {
+    MutexType::Lock lock(m_mutex);
     YAML::Node node;
     node["type"] = "FileLogAppender";
     node["file"] = m_filename;
@@ -620,12 +637,14 @@ std::string FileLogAppender::toYamlString() {
 
 void StdoutLogAppender::log(std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event) {
     if (level >= m_level) {
+        MutexType::Lock lock(m_mutex);
         // StdoutLogAppender类直接在控制台进行输出
         std::cout << m_formatter->format(logger, level, event);
     }
 }
 
 std::string StdoutLogAppender::toYamlString() {
+    MutexType::Lock lock(m_mutex);
     YAML::Node node;
     node["type"] = "StdoutLogAppender";
     if(m_level != LogLevel::UNKNOW) {
@@ -638,6 +657,25 @@ std::string StdoutLogAppender::toYamlString() {
     ss << node;
     return ss.str();
 }
+/////////////////////////////////////LogAppender/////////////////////////////////////
+void LogAppender::setFormatter(LogFormatter::ptr val) {
+    // 多线程下设置与读取可能存在访问冲突，需要加锁
+    MutexType::Lock lock(m_mutex);
+    m_formatter = val;
+    if(m_formatter) {
+        m_hasFormatter = true;
+    } else {
+        m_hasFormatter = false;
+    }
+}
+
+LogFormatter::ptr LogAppender::getFormmater() {
+    // 多线程下设置与读取可能存在访问冲突，需要加锁
+    MutexType::Lock lock(m_mutex);
+    return m_formatter;
+}
+
+
 /////////////////////////////////////LogFormatter/////////////////////////////////////
 LogFormatter::LogFormatter(const std::string& pattern) : m_pattern(pattern){
     init();
@@ -651,15 +689,6 @@ std::string LogFormatter::format(std::shared_ptr<Logger> logger, LogLevel::Level
         i->format(ss, logger, level, event);
     }
     return ss.str();
-}
-
-void LogAppender::setFormatter(LogFormatter::ptr val) {
-    m_formatter = val;
-    if(m_formatter) {
-        m_hasFormatter = true;
-    } else {
-        m_hasFormatter = false;
-    }
 }
 
 void LogFormatter::init(){

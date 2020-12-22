@@ -14,6 +14,7 @@
 
 #include "singleton.h"
 #include "util.h"
+#include "thread.h"
 
 // 添加宏定义
 #define SYLAR_LOG_LEVEL(logger, level) \
@@ -158,12 +159,13 @@ class LogAppender{
 friend class Logger;
 public:
     typedef std::shared_ptr<LogAppender> ptr;
+    typedef Spinlock MutexType;
     virtual ~LogAppender() {}
 
     virtual void log(std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event) = 0;
     virtual std::string toYamlString() = 0;
 
-    LogFormatter::ptr getFormmater() const {return m_formatter;}
+    LogFormatter::ptr getFormmater();
     void setFormatter(LogFormatter::ptr val);
     LogLevel::Level getLevel() { return m_level; }
     void setLevel(LogLevel::Level level) { m_level = level; }
@@ -175,6 +177,9 @@ protected:
 
     // 判断当前appender是否有属于自己的formatter
     bool m_hasFormatter = false;
+
+    // 添加互斥量
+    MutexType m_mutex;
 };
 
 // 日志器
@@ -185,6 +190,7 @@ class Logger : public std::enable_shared_from_this<Logger> {
 friend class LoggerManager;
 public:
     typedef std::shared_ptr<Logger> ptr;
+    typedef Spinlock MutexType;
 
     Logger(const std::string& name = "root");
     void log(LogLevel::Level level, LogEvent::ptr event);
@@ -222,6 +228,7 @@ private:
     std::list<LogAppender::ptr> m_appenders;           // Appender集合
     LogFormatter::ptr m_formatter;
     Logger::ptr m_root;
+    MutexType m_mutex;                              // 互斥锁
 
 };
 
@@ -247,11 +254,15 @@ public:
 private:
     std::string m_filename;
     std::ofstream m_filestream;
+
+    // 解决在日志输出过程中输出目标文件被删除的时间标签
+    uint64_t m_lastTime = 0;
 };
 
 // 日志管理器
 class LoggerManager {
 public:
+    typedef Spinlock Mutextype;
     LoggerManager();
     Logger::ptr getLogger(const std::string& name);
 
@@ -268,6 +279,9 @@ private:
 
     // 缺省的logger
     Logger::ptr m_root;
+
+    // 互斥锁
+    Mutextype m_mutex;
 };
 
 // 使用单例保证全局只有一个logger管理器

@@ -15,6 +15,7 @@
 #include <functional>
 
 #include "log.h"
+#include "thread.h"
 
 namespace sylar{
 
@@ -255,6 +256,9 @@ ToStr采用仿函数的方法， 类内包括一个std::string ToStr() (const T&
 template<class T, class FromStr = LexicalCast<std::string, T>, class ToStr = LexicalCast<T, std::string> >
 class ConfigVar : public ConfigVarBase {
 public:
+    // 配置通常写少读多，采用读写锁
+    typedef RWMutex RWMutextype;
+
     typedef std::shared_ptr<ConfigVar> ptr;
 
     /*当配置发生更改时，通知旧值与新值的回调函数，使用function封装*/
@@ -272,6 +276,7 @@ public:
     std::string toString() override {
         try {
             // return boost::lexical_cast<std::string>(m_val);
+            RWMutextype::ReadLock lock(m_mutex);
             return ToStr()(m_val);
         } catch(std::exception& e){
             SYLAR_LOG_ERROR(SYLAR_LOG_ROOT()) << "ConfigVar::toString exception" 
@@ -293,33 +298,49 @@ public:
         return false;
     }
 
-    const T getValue() const { return m_val; }
-    void setValue(const T& v) { 
-        if(v == m_val)
-            return;
-        
-        for(auto& i : m_cbs) {
-            // i为on_change_cb回调函数
-            i.second(m_val, v);
+    const T getValue() { 
+        RWMutextype::ReadLock lock(m_mutex);
+        return m_val; 
+    }
+    void setValue(const T& v) {
+        {
+            // 在使用回调函数的过程中使用读锁，保证其他线程也能使用回调函数
+            RWMutextype::ReadLock lock(m_mutex);
+            if (v == m_val)
+                return;
+
+            for (auto& i : m_cbs) {
+                // i为on_change_cb回调函数
+                i.second(m_val, v);
+            }
         }
+        // 在修改值时使用写锁
+        RWMutextype::WriteLock lock(m_mutex);
         m_val = v;
     }
     std::string getTypeName() const override { return typeid(T).name(); }
 
-    void addListener(uint64_t key, on_change_cb cb) {
-        m_cbs[key] = cb;
+    uint64_t addListener(on_change_cb cb) {
+        static uint64_t s_fun_id = 0;
+        RWMutextype::WriteLock lock(m_mutex);
+        ++s_fun_id;
+        m_cbs[s_fun_id] = cb;
+        return s_fun_id;
     }
 
     void delListener(uint64_t key) {
+        RWMutextype::WriteLock lock(m_mutex);
         m_cbs.erase(key);
     }
 
     on_change_cb getListener(uint64_t key) {
+        RWMutextype::ReadLock lock(m_mutex);
         auto it = m_cbs.find(key);
         return it == m_cbs.end() ? nullptr : it->second;
     }
 
     void clearListener() {
+        RWMutextype::WriteLock lock(m_mutex);
         m_cbs.clear();
     }
 private:
@@ -327,15 +348,19 @@ private:
 
     // 变更回调函数组，uint64_t key,要求唯一， 一般可以用hash
     std::map<uint64_t, on_change_cb> m_cbs;
+
+    RWMutextype m_mutex;
 };
 
 class Config {
 public:
+    typedef RWMutex RWMutextype;
     typedef std::unordered_map<std::string, ConfigVarBase::ptr> ConfigVarMap;
 
     template <class T>
     static typename ConfigVar<T>::ptr Lookup(const std::string& name,
                                              const T& default_value, const std::string& description = "") {
+        RWMutextype::WriteLock lock(GetMutex());
         auto it = GetDatas().find(name);
         if(it != GetDatas().end()) {
             // 将基类ConfigVarBase指针向下转换为ConfigVar<T>指针
@@ -368,6 +393,7 @@ public:
 
     template<class T>
     static typename ConfigVar<T>::ptr Lookup(const std::string& name) {
+        RWMutextype::ReadLock lock(GetMutex());
         auto it = GetDatas().find(name);
         if(it == GetDatas().end()) {
             return nullptr;
@@ -379,14 +405,23 @@ public:
 
     // 查找是否存在名称为name的node
     static ConfigVarBase::ptr LookupBase(const std::string& name) {
+        RWMutextype::ReadLock lock(GetMutex());
         auto it = GetDatas().find(name);
         return it == GetDatas().end() ? nullptr : it->second;
     }
 
+    static void Visit(std::function<void(ConfigVarBase::ptr)> cb);
 private:
+    // 创建全局变量时全局变量的初始化没有明确的顺序，如果采用静态成员的方式，
+    // 若静态成员的初始化比使用的时机要晚，那么要使用的对象尚未构建吗，会出现内存错误
     static ConfigVarMap& GetDatas() {
         static ConfigVarMap m_datas;
         return m_datas;
+    }
+
+    static RWMutextype& GetMutex() {
+        static RWMutextype s_mutex;
+        return s_mutex;
     }
 };
 

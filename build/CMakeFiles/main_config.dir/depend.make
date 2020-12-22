@@ -4,6 +4,7 @@
 CMakeFiles/main_config.dir/tests/test_config.cc.o: ../sylar/config.h
 CMakeFiles/main_config.dir/tests/test_config.cc.o: ../sylar/log.h
 CMakeFiles/main_config.dir/tests/test_config.cc.o: ../sylar/singleton.h
+CMakeFiles/main_config.dir/tests/test_config.cc.o: ../sylar/thread.h
 CMakeFiles/main_config.dir/tests/test_config.cc.o: ../sylar/util.h
 CMakeFiles/main_config.dir/tests/test_config.cc.o: ../tests/test_config.cc
 
