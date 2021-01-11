@@ -91,6 +91,12 @@ unistd.h
 -
 stdint.h
 -
+vector
+-
+string
+-
+stdlib.h
+-
 
 /home/fred/workspace/sylar/tests/test_config.cc
 ../sylar/config.h

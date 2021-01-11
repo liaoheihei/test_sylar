@@ -61,6 +61,12 @@ unistd.h
 -
 stdint.h
 -
+vector
+-
+string
+-
+stdlib.h
+-
 
 /home/fred/workspace/sylar/tests/test.cc
 stdio.h

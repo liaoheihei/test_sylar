@@ -20,7 +20,7 @@
 #define SYLAR_LOG_LEVEL(logger, level) \
     if(logger->getLevel() <= level) \
         sylar::LogEventWrap(sylar::LogEvent::ptr(new sylar::LogEvent(logger, level, __FILE__, __LINE__, 0, sylar::GetThreadID(), \
-         sylar::GetFiberID(), time(0)))).getSS()
+         sylar::GetFiberID(), time(0), sylar::Thread::GetName()))).getSS()
         
 #define SYLAR_LOG_DEBUG(logger) SYLAR_LOG_LEVEL(logger, sylar::LogLevel::DEBUG)
 #define SYLAR_LOG_INFO(logger) SYLAR_LOG_LEVEL(logger, sylar::LogLevel::INFO)
@@ -32,7 +32,7 @@
     if(logger->getLevel() <= level) \
         sylar::LogEventWrap(sylar::LogEvent::ptr(new sylar::LogEvent(logger, level, \
         __FILE__, __LINE__, 0, sylar::GetThreadID(), sylar::GetFiberID(), \
-        time(0)))).getEvent()->format(fmt, __VA_ARGS__)
+        time(0), sylar::Thread::GetName()))).getEvent()->format(fmt, __VA_ARGS__)
 
 #define SYLAR_LOG_FMT_DEBUG(logger, fmt, ...) SYLAR_LOG_FMT_LEVEL(logger, sylar::LogLevel::DEBUG, fmt, __VA_ARGS__)
 #define SYLAR_LOG_FMT_INFO(logger, fmt, ...) SYLAR_LOG_FMT_LEVEL(logger, sylar::LogLevel::INFO, fmt, __VA_ARGS__)
@@ -75,7 +75,7 @@ public:
     typedef std::shared_ptr<LogEvent> ptr;
     LogEvent();
     LogEvent(std::shared_ptr<Logger> logger, LogLevel::Level level, const char* file, int32_t line, uint32_t elapse, uint32_t threadID, 
-            uint32_t fiberID, uint64_t time);
+            uint32_t fiberID, uint64_t time, const std::string& thread_name);
     ~LogEvent();
 
     // 获得属性方法
@@ -85,6 +85,7 @@ public:
     uint32_t getThreadId() { return m_threadID; }
     uint32_t getFiberId() { return m_fiberID; }
     uint64_t getTime() { return m_time; }
+    const std::string& getThreadName() const { return m_threadName; }
     std::string getContent() const { return m_ss.str(); }
     std::shared_ptr<Logger> getLogger() const { return m_logger; }
     LogLevel::Level getLevel() const { return m_level; }
@@ -104,6 +105,8 @@ private:
 
     std::shared_ptr<Logger> m_logger;   // 当前logEvent对应的logger
     LogLevel::Level m_level;            // 当前logEvent对应的日志级别
+    std::string m_threadName;           // 线程名称
+
 };
 
 // 用于封装LogEvent，在析构时把LogEvent写入logger里面

@@ -8,6 +8,15 @@ CMakeFiles/sylar.dir/sylar/config.cc.o
  /home/fred/workspace/sylar/sylar/singleton.h
  /home/fred/workspace/sylar/sylar/thread.h
  /home/fred/workspace/sylar/sylar/util.h
+CMakeFiles/sylar.dir/sylar/fiber.cc.o
+ /home/fred/workspace/sylar/sylar/config.h
+ /home/fred/workspace/sylar/sylar/fiber.cc
+ /home/fred/workspace/sylar/sylar/fiber.h
+ /home/fred/workspace/sylar/sylar/log.h
+ /home/fred/workspace/sylar/sylar/macro.h
+ /home/fred/workspace/sylar/sylar/singleton.h
+ /home/fred/workspace/sylar/sylar/thread.h
+ /home/fred/workspace/sylar/sylar/util.h
 CMakeFiles/sylar.dir/sylar/log.cc.o
  /home/fred/workspace/sylar/sylar/config.h
  /home/fred/workspace/sylar/sylar/log.cc
@@ -22,5 +31,9 @@ CMakeFiles/sylar.dir/sylar/thread.cc.o
  /home/fred/workspace/sylar/sylar/thread.h
  /home/fred/workspace/sylar/sylar/util.h
 CMakeFiles/sylar.dir/sylar/util.cc.o
+ /home/fred/workspace/sylar/sylar/fiber.h
+ /home/fred/workspace/sylar/sylar/log.h
+ /home/fred/workspace/sylar/sylar/singleton.h
+ /home/fred/workspace/sylar/sylar/thread.h
  /home/fred/workspace/sylar/sylar/util.cc
  /home/fred/workspace/sylar/sylar/util.h
